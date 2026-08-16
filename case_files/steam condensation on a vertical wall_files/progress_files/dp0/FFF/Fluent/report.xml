@@ -1,0 +1,293 @@
+<FluentXMLReport>
+<version>
+Fluent
+Version: 2d, dp, pbns, vof, lam, transient (2d, double precision, pressure-based, VOF, laminar, transient)
+Release: 26.1.0
+Title: 
+</version>
+
+<Models>
+
+Models
+------
+
+   Model                        Settings                       
+   ---------------------------------------------------------
+   Space                        2D                             
+   Time                         Unsteady, 1st-Order Implicit   
+   Viscous                      Laminar                        
+   Heat Transfer                Enabled                        
+   Solidification and Melting   Disabled                       
+   Radiation                    None                           
+   Species                      Disabled                       
+   Coupled Dispersed Phase      Disabled                       
+   NOx Pollutants               Disabled                       
+   SOx Pollutants               Disabled                       
+   Soot                         Disabled                       
+   Mercury Pollutants           Disabled                       
+   Structure                    Disabled                       
+   Acoustics                    Disabled                       
+   Eulerian Wall Film           Disabled                       
+   Potential/Electrochemistry   Disabled                       
+   Multiphase                   Volume of Fluid                
+
+</Models>
+
+<MaterialProperties>
+Material Properties
+-------------------
+
+   Material: water-liquid (fluid)
+
+      Property                  Units      Method     Value(s)         
+      --------------------------------------------------------------
+      Density                   kg/m^3     constant   998.2            
+      Cp (Specific Heat)        J/(kg K)   constant   4182             
+      Thermal Conductivity      W/(m K)    constant   0.6              
+      Viscosity                 kg/(m s)   constant   0.001003         
+      Molecular Weight          kg/kmol    constant   18.0152          
+      Standard State Enthalpy   J/kgmol    constant   -2.8584122e+08   
+      Reference Temperature     K          constant   298              
+
+   Material: water-vapor (fluid)
+
+      Property                  Units      Method                 Value(s)                                                                                                                                                  
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      Density                   kg/m^3     constant               0.5542                                                                                                                                                    
+      Cp (Specific Heat)        J/(kg K)   piecewise-polynomial   (300-1000: 1563.0767 1.6037546 -0.0029327841 3.2161009e-06 -1.1568268e-09) (1000-5000: 1233.2338 1.4105233 -0.00040291411 5.5427718e-08 -2.949824e-12)    
+      Thermal Conductivity      W/(m K)    constant               0.0261                                                                                                                                                    
+      Viscosity                 kg/(m s)   constant               1.34e-05                                                                                                                                                  
+      Molecular Weight          kg/kmol    constant               18.01534                                                                                                                                                  
+      Standard State Enthalpy   J/kgmol    constant               -2.418379e+08                                                                                                                                             
+      Reference Temperature     K          constant               298.15                                                                                                                                                    
+
+   Material: air (fluid)
+
+      Property                  Units      Method     Value(s)     
+      ----------------------------------------------------------
+      Density                   kg/m^3     constant   1.225        
+      Cp (Specific Heat)        J/(kg K)   constant   1006.43      
+      Thermal Conductivity      W/(m K)    constant   0.0242       
+      Viscosity                 kg/(m s)   constant   1.7894e-05   
+      Molecular Weight          kg/kmol    constant   28.966       
+      Standard State Enthalpy   J/kgmol    constant   0            
+      Reference Temperature     K          constant   298.15       
+
+   Material: aluminum (solid)
+
+      Property               Units      Method     Value(s)   
+      -----------------------------------------------------
+      Density                kg/m^3     constant   2719       
+      Cp (Specific Heat)     J/(kg K)   constant   871        
+      Thermal Conductivity   W/(m K)    constant   202.4      
+
+</MaterialProperties>
+
+<CellZoneConditions>
+Cell Zone Conditions
+--------------------
+
+   Zones
+
+      name                       id   type    material       
+      ----------------------------------------------------
+      surface_body (mixture)     2    fluid   water-liquid   
+      surface_body (primary)     2    fluid   water-vapor    
+      surface_body (secondary)   2    fluid   water-liquid   
+
+   Setup Conditions
+
+      surface_body (mixture)
+
+         Condition       Value   
+         ---------------------
+         Frame Motion?   no      
+         Mesh Motion?    no      
+
+      surface_body (primary)
+
+         Condition   Value   
+         -----------------
+
+      surface_body (secondary)
+
+         Condition   Value   
+         -----------------
+
+</CellZoneConditions>
+
+<BoundaryConditions>
+Boundary Conditions
+-------------------
+
+   Zones
+
+      name                         id   type              
+      -------------------------------------------------
+      cold_wall (mixture)          5    wall              
+      cold_wall (primary)          5    wall              
+      cold_wall (secondary)        5    wall              
+      inlet (mixture)              6    velocity-inlet    
+      inlet (primary)              6    velocity-inlet    
+      inlet (secondary)            6    velocity-inlet    
+      adiabetic_wall (mixture)     7    wall              
+      adiabetic_wall (primary)     7    wall              
+      adiabetic_wall (secondary)   7    wall              
+      outlet (mixture)             8    pressure-outlet   
+      outlet (primary)             8    pressure-outlet   
+      outlet (secondary)           8    pressure-outlet   
+
+   Setup Conditions
+
+      cold_wall (mixture)
+
+         Condition                  Value                             
+         ----------------------------------------------------------
+         Material Name              aluminum                          
+         Thermal BC Type            Temperature                       
+         Temperature [K]            350                               
+         Wall Motion                Stationary Wall                   
+         Shear Boundary Condition   No Slip                           
+         Contact Angles [deg]       (((constant . 90) (profile  )))   
+
+      cold_wall (primary)
+
+         Condition   Value   
+         -----------------
+
+      cold_wall (secondary)
+
+         Condition   Value   
+         -----------------
+
+      inlet (mixture)
+
+         Condition                  Value   
+         --------------------------------
+         Velocity Magnitude [m/s]   0.1     
+         Temperature [K]            380     
+
+      inlet (primary)
+
+         Condition   Value   
+         -----------------
+
+      inlet (secondary)
+
+         Condition   Value   
+         -----------------
+
+      adiabetic_wall (mixture)
+
+         Condition                  Value                             
+         ----------------------------------------------------------
+         Material Name              aluminum                          
+         Thermal BC Type            Heat Flux                         
+         Wall Motion                Stationary Wall                   
+         Shear Boundary Condition   No Slip                           
+         Contact Angles [deg]       (((constant . 90) (profile  )))   
+
+      adiabetic_wall (primary)
+
+         Condition   Value   
+         -----------------
+
+      adiabetic_wall (secondary)
+
+         Condition   Value   
+         -----------------
+
+      outlet (mixture)
+
+         Condition                        Value   
+         --------------------------------------
+         Backflow Total Temperature [K]   373     
+
+      outlet (primary)
+
+         Condition   Value   
+         -----------------
+
+      outlet (secondary)
+
+         Condition   Value   
+         -----------------
+
+</BoundaryConditions>
+
+<SolverSettings>
+Solver Settings
+---------------
+
+   Equations
+
+      Equation          Solved   
+      ------------------------
+      Flow              yes      
+      Volume Fraction   yes      
+      Energy            yes      
+
+   Numerics
+
+      Numeric                         Enabled   
+      ---------------------------------------
+      Absolute Velocity Formulation   yes       
+
+   Unsteady Calculation Parameters
+
+                                          
+      ---------------------------------
+      Number of Time Steps       8000     
+      Time Step Size [s]         0.0005   
+      Max Iterations/Time Step   20       
+
+   Under-Relaxation Factors
+
+      Variable            Relaxation Factor   
+      -------------------------------------
+      Pressure            0.3                 
+      Density             1                   
+      Body Forces         1                   
+      Momentum            0.5                 
+      Vaporization Mass   1                   
+      Energy              0.89999998          
+
+   Linear Solver
+
+      Variable     Solver Type   Termination Criterion   Residual Reduction Tolerance   
+      -------------------------------------------------------------------------------
+      Pressure     V-Cycle       0.1                                                    
+      X-Momentum   Flexible      0.1                     0.7                            
+      Y-Momentum   Flexible      0.1                     0.7                            
+      Energy       F-Cycle       0.1                                                    
+
+   Pressure-Velocity Coupling
+
+      Parameter                     Value   
+      -----------------------------------
+      Type                          PISO    
+      Skewness-Neighbour Coupling   yes     
+      Skewness Correction           1       
+      Neighbour Correction          1       
+
+   Discretization Scheme
+
+      Variable          Scheme                
+      -------------------------------------
+      Pressure          PRESTO!               
+      Momentum          Second Order Upwind   
+      Volume Fraction   Compressive           
+      Energy            Second Order Upwind   
+
+   Solution Limits
+
+      Quantity                         Limit   
+      --------------------------------------
+      Minimum Absolute Pressure [Pa]   1       
+      Maximum Absolute Pressure [Pa]   5e+10   
+      Minimum Static Temperature [K]   1       
+      Maximum Static Temperature [K]   5000    
+
+</SolverSettings>
+
+</FluentXMLReport>
